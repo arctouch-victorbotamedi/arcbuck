@@ -6,8 +6,14 @@
 // connected to a callback that increments a counter.
 
 import 'package:arcbuck/app.dart';
+import 'package:arcbuck/data/event_repository.dart';
 import 'package:arcbuck/module/event_bloc.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(App(EventBloc()));
+void main() {
+  var repository = EventRepository();
+  var eventBloc = EventBloc(repository);
+  runApp(App(eventBloc));
+}
+
 
