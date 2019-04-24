@@ -19,10 +19,11 @@ class App extends StatelessWidget {
         child: new MaterialApp(
           title: 'Flutter Demo',
           theme: new ThemeData(
-            primaryColor: Color.fromARGB(255, 219, 48, 100),
-            accentColor: Color.fromARGB(255, 249, 159, 0),
-            backgroundColor: Color.fromARGB(255, 248, 248, 248),
+            primaryColor: Color.fromARGB(255, 255, 131, 0),
+            accentColor: Color.fromARGB(255, 255, 131, 0),
+            backgroundColor: Color.fromARGB(255, 238, 243, 252),
             scaffoldBackgroundColor: Color.fromARGB(255, 248, 248, 248),
+            primaryTextTheme: TextTheme(title: TextStyle(color: Colors.white))
           ),
           home: new HomeView(),
         )

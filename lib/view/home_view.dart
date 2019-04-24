@@ -13,7 +13,8 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sample Code'),
+        elevation: 0,
+        title: Text('April Budget'),
       ),
       body: Center(
         child: Text('You have pressed the button $_count times.'),
