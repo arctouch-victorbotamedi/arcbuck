@@ -1,4 +1,5 @@
 import 'package:arcbuck/module/event_bloc.dart';
+import 'package:arcbuck/module/event_events.dart';
 import 'package:arcbuck/view/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -8,7 +9,9 @@ class App extends StatelessWidget {
 
   final EventBloc eventBloc;
 
-  App(this.eventBloc);
+  App(this.eventBloc) {
+    eventBloc.dispatch(Fetch());
+  }
 
   @override
   Widget build(BuildContext context) {

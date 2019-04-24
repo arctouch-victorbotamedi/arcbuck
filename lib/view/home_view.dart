@@ -1,4 +1,8 @@
+import 'package:arcbuck/module/event_bloc.dart';
+import 'package:arcbuck/module/event_states.dart';
+import 'package:arcbuck/view/widget/event_list_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeView extends StatefulWidget {
   HomeView({Key key}) : super(key: key);
@@ -8,6 +12,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  final _scrollThresholdPercentage = 70;
   int _count = 0;
 
   Widget build(BuildContext context) {
@@ -16,9 +21,7 @@ class _HomeViewState extends State<HomeView> {
         elevation: 0,
         title: Text('April Budget'),
       ),
-      body: Center(
-        child: Text('You have pressed the button $_count times.'),
-      ),
+      body: _buildCenterWidget(context),
       bottomNavigationBar: BottomAppBar(
         child: Container(
           height: 50.0,
@@ -32,6 +35,37 @@ class _HomeViewState extends State<HomeView> {
         child: Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    );
+  }
+
+  Widget _buildCenterWidget(BuildContext context) {
+    var bloc = BlocProvider.of<EventBloc>(context);
+    return BlocBuilder(
+      bloc: bloc,
+      builder: (context, state) {
+        switch (state.runtimeType) {
+          //case UninitializedState:
+          //  return _buildUninitilazedList();
+          case EventsLoadedState:
+            return _buildEventListWidget(bloc, state);
+          default:
+            return Center(child: Text('Failed to fetch'));
+        }
+      }
+    );
+  }
+
+  Widget _buildEventListWidget(EventBloc bloc, EventsLoadedState state) {
+    return ListView.builder(
+      itemCount: state.events.length,
+      padding: const EdgeInsets.all(16.0),
+      itemBuilder: (context, index) {
+        //var currentPercentage =  (index * 100) / state.movies.length;
+        //if (currentPercentage >= _scrollThresholdPercentage) {
+        //  bloc.dispatch(Fetch());
+        //}
+        return EventListItem(state.events[index]);
+      },
     );
   }
 }

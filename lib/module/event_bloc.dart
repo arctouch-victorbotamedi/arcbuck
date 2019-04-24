@@ -13,6 +13,11 @@ class EventBloc extends Bloc<EventBlocEvent, EventState> {
 
   @override
   Stream<EventState> mapEventToState(EventBlocEvent event) async* {
-    yield initialState;
+    if (event is Fetch) {
+      var events = await eventRepository.fetch(0);
+      yield EventsLoadedState(events);
+    }
+    else
+      yield initialState;
   }
 }
