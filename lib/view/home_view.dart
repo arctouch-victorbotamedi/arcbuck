@@ -55,6 +55,22 @@ class _HomeViewState extends State<HomeView> {
           decoration: BoxDecoration(
             gradient: LinearGradient(colors: [const Color(0xffff8300), const Color(0xFFe8670a)])
           ),
+          child: Center(
+            child: RichText(
+              strutStyle: StrutStyle(
+                fontSize: 24
+              ),
+              text: TextSpan(
+                text: 'April’s ',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                children: [
+                  TextSpan(
+                      text: 'Budget',
+                      style: new TextStyle(fontSize: 24, fontWeight: FontWeight.normal))
+                ]
+              ),
+            ),
+          ),
         ),
         AvailableBudgetCard(
           height: 167,
