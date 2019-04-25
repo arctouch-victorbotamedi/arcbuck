@@ -1,6 +1,7 @@
 import 'package:arcbuck/module/event_bloc.dart';
 import 'package:arcbuck/module/event_events.dart';
 import 'package:arcbuck/view/home_view.dart';
+import 'package:arcbuck/view/resources/theme_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,14 +23,15 @@ class App extends StatelessWidget {
         child: new MaterialApp(
           title: 'Flutter Demo',
           theme: new ThemeData(
-            primaryColor: Color.fromARGB(255, 255, 131, 0),
-            accentColor: Color.fromARGB(255, 255, 131, 0),
-            backgroundColor: Color.fromARGB(255, 238, 243, 252),
-            scaffoldBackgroundColor: Color.fromARGB(255, 238, 243, 252),
-            primaryTextTheme: TextTheme(title: TextStyle(color: Colors.white)),
-            cardColor: Colors.white,
-            fontFamily: "Avenir",
-
+            primaryColor: ThemeColors.accent,
+            accentColor: ThemeColors.accent,
+            backgroundColor: ThemeColors.backgroundColor,
+            scaffoldBackgroundColor: ThemeColors.scaffoldBackgroundColor,
+            cardColor: ThemeColors.white,
+            bottomAppBarTheme: BottomAppBarTheme(color: ThemeColors.white, elevation: 0.0),
+            iconTheme: IconThemeData(color: ThemeColors.white),
+            primaryTextTheme: TextTheme(title: TextStyle(color: ThemeColors.white)),
+            fontFamily: "Avenir"
           ),
           home: new HomeView(),
         )

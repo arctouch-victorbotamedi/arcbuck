@@ -31,19 +31,7 @@ class _HomeViewState extends State<HomeView> {
           height: 50.0,
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        shape: StadiumBorder(
-            side: BorderSide(
-                color: mainColor.withAlpha(25),
-                width: 50,
-            )
-        ),
-        onPressed: () => setState(() {
-          _count++;
-        }),
-        tooltip: 'Increment Counter',
-        child: Icon(Icons.add),
-      ),
+      floatingActionButton: _buildFloatActionButton(context),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
@@ -91,17 +79,40 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Widget _buildEventListWidget(EventBloc bloc, EventsLoadedState state) =>
-      Flexible(
-          child: ListView.builder(
-            itemCount: state.events.length,
-            itemBuilder: (context, index) {
-              //var currentPercentage =  (index * 100) / state.movies.length;
-              //if (currentPercentage >= _scrollThresholdPercentage) {
-              //  bloc.dispatch(Fetch());
-              //}
-              return EventListItem(state.events[index]);
-            },
-          )
-      );
+    Flexible(
+        child: ListView.builder(
+          itemCount: state.events.length,
+          itemBuilder: (context, index) {
+            //var currentPercentage =  (index * 100) / state.movies.length;
+            //if (currentPercentage >= _scrollThresholdPercentage) {
+            //  bloc.dispatch(Fetch());
+            //}
+            return EventListItem(state.events[index]);
+          },
+        )
+    );
 
+  Widget _buildFloatActionButton(BuildContext context) {
+    return Container(
+      width: 72.0,
+      height: 72.0,
+      margin: const EdgeInsets.only(top: 20),
+      decoration: new BoxDecoration(
+        shape: BoxShape.circle,
+        border: new Border.all(
+          color: Theme.of(context).accentColor.withAlpha(25),
+          width: 8.0,
+        ),
+      ),
+      child: new RawMaterialButton(
+        shape: new CircleBorder(),
+        elevation: 0.0,
+        fillColor: Theme.of(context).accentColor,
+        child: Icon(
+            Icons.add
+        ),
+        onPressed: (){},
+      ),
+    );
+  }
 }
