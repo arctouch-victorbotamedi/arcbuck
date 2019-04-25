@@ -1,5 +1,6 @@
 import 'package:arcbuck/module/event_bloc.dart';
 import 'package:arcbuck/module/event_states.dart';
+import 'package:arcbuck/view/widget/available_budget_card.dart';
 import 'package:arcbuck/view/widget/event_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -57,10 +58,18 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Widget _buildHeaderWidget(BuildContext context, ThemeData theme) =>
-    Container(
-        width: double.infinity,
-        color: theme.primaryColor,
-        height: 81,
+    Stack(
+      children: [
+        Container(
+          width: double.infinity,
+          color: theme.primaryColor,
+          height: 64,
+        ),
+        AvailableBudgetCard(
+          height: 167,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+        )
+      ],
     );
 
 
