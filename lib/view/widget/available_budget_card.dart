@@ -71,6 +71,16 @@ class AvailableBudgetCard extends StatelessWidget {
 
 
   Widget _buildProgressBar() =>
-      Container(height: 24, color: Colors.blue);
+      Material(
+        borderRadius: BorderRadius.circular(19),
+        clipBehavior: Clip.antiAlias,
+        child: Container(
+          height: 24,
+          child: LinearProgressIndicator(
+            backgroundColor: Colors.blue,
+            value: 0.4,
+          ),
+        )
+      );
 }
 
