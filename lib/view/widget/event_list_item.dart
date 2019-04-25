@@ -1,4 +1,5 @@
 import 'package:arcbuck/data/event.dart';
+import 'package:arcbuck/view/widget/smooth_shadow_card.dart';
 import 'package:flutter/material.dart';
 
 class EventListItem extends StatelessWidget {
@@ -8,8 +9,8 @@ class EventListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return Card(
+    return SmoothShadowCard(
+      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
       child:
         Container(
           height: 78,
