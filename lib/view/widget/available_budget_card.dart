@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:arcbuck/view/widget/animated_progress_bar.dart';
 import 'package:arcbuck/view/widget/smooth_shadow_card.dart';
 import 'package:flutter/material.dart';

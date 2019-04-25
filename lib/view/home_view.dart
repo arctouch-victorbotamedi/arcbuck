@@ -22,7 +22,6 @@ class _HomeViewState extends State<HomeView> {
 
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    var mainColor = theme.primaryColor;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -45,36 +44,41 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  Widget _buildHeaderWidget(BuildContext context, ThemeData theme) =>
-      Stack(
-        children: [
-          Container(
-            width: double.infinity,
-            color: theme.primaryColor,
-            height: 64,
+  Widget _buildHeaderWidget(BuildContext context, ThemeData theme) {
+    var query = MediaQuery.of(context);
+    var statusBarHeight = query.padding.top;
+    return Stack(
+      children: [
+        Container(
+          width: double.infinity,
+          height: 118 + statusBarHeight,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(colors: [const Color(0xffff8300), const Color(0xFFe8670a)])
           ),
-          AvailableBudgetCard(
-            height: 167,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-          )
-        ],
-      );
+        ),
+        AvailableBudgetCard(
+          height: 167,
+          padding: EdgeInsets.only(left: 16, right: 16, top: 67 + statusBarHeight),
+        )
+      ],
+    );
+  }
 
-
-  Widget _buildEventsContainerWidget(BuildContext context, ThemeData theme) {
-    var bloc = BlocProvider.of<EventBloc>(context);
-    return BlocBuilder(
-        bloc: bloc,
-        builder: (context, state) {
-          switch (state.runtimeType) {
-          //case UninitializedState:
-          //  return _buildUninitilazedList();
-            case EventsLoadedState:
-              return _buildEventListWidget(bloc, state);
-            default:
-              return Center(child: Text('Failed to fetch'));
+    Widget _buildEventsContainerWidget(BuildContext context, ThemeData theme) {
+      var bloc = BlocProvider.of<EventBloc>(context);
+      return BlocBuilder(
+          bloc: bloc,
+          builder: (context, state) {
+            switch (state.runtimeType) {
+            //case UninitializedState:
+            //  return _buildUninitilazedList();
+              case EventsLoadedState:
+                return _buildEventListWidget(bloc, state);
+              default:
+                return Center(child: Text('Failed to fetch'));
+            }
           }
-        }
+        
     );
   }
 
