@@ -92,7 +92,7 @@ class _HomeViewState extends State<HomeView> {
         )
     );
 
-  Container _buildFloatActionButton(BuildContext context) {
+  Widget _buildFloatActionButton(BuildContext context) {
     return Container(
       width: 72.0,
       height: 72.0,
