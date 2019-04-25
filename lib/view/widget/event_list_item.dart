@@ -9,8 +9,8 @@ class EventListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return SmoothShadowCard(
+      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
       child:
         Container(
           height: 78,

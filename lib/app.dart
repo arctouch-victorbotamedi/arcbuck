@@ -27,7 +27,9 @@ class App extends StatelessWidget {
             backgroundColor: Color.fromARGB(255, 238, 243, 252),
             scaffoldBackgroundColor: Color.fromARGB(255, 238, 243, 252),
             primaryTextTheme: TextTheme(title: TextStyle(color: Colors.white)),
-            cardColor: Colors.white
+            cardColor: Colors.white,
+            fontFamily: "Avenir",
+
           ),
           home: new HomeView(),
         )

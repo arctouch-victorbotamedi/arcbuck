@@ -94,7 +94,6 @@ class _HomeViewState extends State<HomeView> {
       Flexible(
           child: ListView.builder(
             itemCount: state.events.length,
-            padding: const EdgeInsets.all(16.0),
             itemBuilder: (context, index) {
               //var currentPercentage =  (index * 100) / state.movies.length;
               //if (currentPercentage >= _scrollThresholdPercentage) {
