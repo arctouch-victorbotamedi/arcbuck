@@ -1,9 +1,12 @@
 import 'package:arcbuck/module/event_bloc.dart';
 import 'package:arcbuck/module/event_states.dart';
+import 'package:arcbuck/view/resources/styles.dart';
 import 'package:arcbuck/view/widget/available_budget_card.dart';
 import 'package:arcbuck/view/widget/event_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+enum BottomNavMenu { home, settings }
 
 class HomeView extends StatefulWidget {
   HomeView({Key key}) : super(key: key);
@@ -15,6 +18,7 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   final _scrollThresholdPercentage = 70;
   int _count = 0;
+  BottomNavMenu _selectedItem = BottomNavMenu.home;
 
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
@@ -25,12 +29,8 @@ class _HomeViewState extends State<HomeView> {
         centerTitle: true,
         title: Text('April Budget'),
       ),
-      body: _buildCenterWidget(context, theme),
-      bottomNavigationBar: BottomAppBar(
-        child: Container(
-          height: 50.0,
-        ),
-      ),
+      body: _buildBody(context, theme),
+      bottomNavigationBar: _buildBottomNavigation(context),
       floatingActionButton: _buildFloatActionButton(context),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
@@ -46,19 +46,19 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Widget _buildHeaderWidget(BuildContext context, ThemeData theme) =>
-    Stack(
-      children: [
-        Container(
-          width: double.infinity,
-          color: theme.primaryColor,
-          height: 64,
-        ),
-        AvailableBudgetCard(
-          height: 167,
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-        )
-      ],
-    );
+      Stack(
+        children: [
+          Container(
+            width: double.infinity,
+            color: theme.primaryColor,
+            height: 64,
+          ),
+          AvailableBudgetCard(
+            height: 167,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+          )
+        ],
+      );
 
 
   Widget _buildEventsContainerWidget(BuildContext context, ThemeData theme) {
@@ -79,18 +79,18 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Widget _buildEventListWidget(EventBloc bloc, EventsLoadedState state) =>
-    Flexible(
-        child: ListView.builder(
-          itemCount: state.events.length,
-          itemBuilder: (context, index) {
-            //var currentPercentage =  (index * 100) / state.movies.length;
-            //if (currentPercentage >= _scrollThresholdPercentage) {
-            //  bloc.dispatch(Fetch());
-            //}
-            return EventListItem(state.events[index]);
-          },
-        )
-    );
+      Flexible(
+          child: ListView.builder(
+            itemCount: state.events.length,
+            itemBuilder: (context, index) {
+              //var currentPercentage =  (index * 100) / state.movies.length;
+              //if (currentPercentage >= _scrollThresholdPercentage) {
+              //  bloc.dispatch(Fetch());
+              //}
+              return EventListItem(state.events[index]);
+            },
+          )
+      );
 
   Widget _buildFloatActionButton(BuildContext context) {
     return Container(
@@ -100,19 +100,100 @@ class _HomeViewState extends State<HomeView> {
       decoration: new BoxDecoration(
         shape: BoxShape.circle,
         border: new Border.all(
-          color: Theme.of(context).accentColor.withAlpha(25),
+          color: Theme
+              .of(context)
+              .accentColor
+              .withAlpha(25),
           width: 8.0,
         ),
       ),
       child: new RawMaterialButton(
         shape: new CircleBorder(),
         elevation: 0.0,
-        fillColor: Theme.of(context).accentColor,
+        fillColor: Theme
+            .of(context)
+            .accentColor,
         child: Icon(
             Icons.add
         ),
-        onPressed: (){},
+        onPressed: () {},
       ),
     );
+  }
+
+  Widget _buildBottomNavigation(BuildContext context) {
+    var accentColor = Theme
+        .of(context)
+        .accentColor;
+
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            Styles.shadowStyle
+          ]
+      ),
+      child: BottomAppBar(
+        child: Container(
+            height: 46.0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: _buildBottomNavigationItems(context)
+            )
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSettingsIcon(BuildContext context)
+  {
+    var accentColor = Theme
+        .of(context)
+        .accentColor;
+
+    var color = _selectedItem == BottomNavMenu.settings ? accentColor : Colors.grey;
+
+    return IconButton(icon: Icon(Icons.settings), color: color, onPressed: _onSettingsPressed);
+  }
+
+  Widget _buildHomeIcon(BuildContext context)
+  {
+    var accentColor = Theme
+        .of(context)
+        .accentColor;
+
+    var color = _selectedItem == BottomNavMenu.home ? accentColor : Colors.grey;
+
+    return IconButton(icon: Icon(Icons.home), color:  color, onPressed: _onHomePressed);
+  }
+
+  Widget _buildBody(BuildContext context, ThemeData theme) {
+
+    switch (_selectedItem)
+    {
+      case BottomNavMenu.home:
+        return _buildCenterWidget(context, theme);
+      case BottomNavMenu.settings:
+        return Text("Settings");
+    }
+  }
+
+  List<Widget> _buildBottomNavigationItems(BuildContext context) {
+    return [
+      _buildHomeIcon(context),
+      _buildSettingsIcon(context)
+    ];
+  }
+
+  void _onHomePressed() {
+    setState(() {
+      _selectedItem = BottomNavMenu.home;
+    });
+  }
+
+  void _onSettingsPressed() {
+    setState(() {
+      _selectedItem = BottomNavMenu.settings;
+    });
   }
 }
