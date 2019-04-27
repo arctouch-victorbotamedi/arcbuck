@@ -121,12 +121,21 @@ class _HomeSliverState extends State<HomeSliver> {
     var initialWeek = _weekNumber(events.first.date);
     var currentWeek = initialWeek;
     var allHeadersIncluded = false;
+    var firstWeekIncluded = false;
     for (int i = 1; i < events.length; i++) {
       String header;
       var weekDifference = _weekNumber(events[i].date) - currentWeek;
       if (!allHeadersIncluded && weekDifference > 0 && weekDifference <= 2) {
-        header = weekDifference == 1 ? "Next week" : "Upcoming";
-        allHeadersIncluded = weekDifference == 2;
+        if (weekDifference == 1 && !firstWeekIncluded) {
+          header = "Next week";
+          firstWeekIncluded = true;
+        }
+        else {
+          if (weekDifference == 2 && !allHeadersIncluded) {
+            header = "Upcoming";
+            allHeadersIncluded = true;
+          }
+        }
       }
       renderItems.add(_EventRenderItem(events[i], header: header));
       currentWeek = _weekNumber(events.first.date);
