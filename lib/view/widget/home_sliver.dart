@@ -1,7 +1,7 @@
 import 'package:arcbuck/module/event_bloc.dart';
 import 'package:arcbuck/module/event_states.dart';
 import 'package:arcbuck/view/resources/theme_colors.dart';
-import 'package:arcbuck/view/widget/available_budget_card.dart';
+import 'package:arcbuck/view/widget/animated_available_budget_card.dart';
 import 'package:arcbuck/view/widget/event_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -86,13 +86,9 @@ class _HomeSliverState extends State<HomeSliver> {
                       ),
                     ),
                   ),
-                  AvailableBudgetCard(
+                  AnimatedAvailableBudgetCard(
                     height: 167,
-                    borderRadius: BorderRadius.circular(8 * animationPercentage),
-                    padding: EdgeInsets.only(
-                        left: 16 * animationPercentage,
-                        right: 16 * animationPercentage,
-                        top: (67 + statusBarHeight) * animationPercentage),
+                    animationPercentage: animationPercentage,
                   )
                 ],
               );

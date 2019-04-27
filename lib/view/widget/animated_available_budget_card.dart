@@ -3,19 +3,29 @@ import 'package:arcbuck/view/widget/animated_progress_bar.dart';
 import 'package:arcbuck/view/widget/smooth_shadow_card.dart';
 import 'package:flutter/material.dart';
 
-class AvailableBudgetCard extends StatelessWidget {
+class AnimatedAvailableBudgetCard extends StatelessWidget {
   final double height;
-  final EdgeInsets padding;
-  final BorderRadiusGeometry borderRadius;
+  final double animationPercentage;
 
-  AvailableBudgetCard({this.height, this.padding, this.borderRadius});
+
+  AnimatedAvailableBudgetCard({
+    this.height,
+    this.animationPercentage=1.0
+  });
 
   @override
-  Widget build(BuildContext context) => SmoothShadowCard(
-      height: height,
-      margin: padding,
-      borderRadius: borderRadius,
-      child: Padding(
+  Widget build(BuildContext context) {
+    var query = MediaQuery.of(context);
+    var statusBarHeight = query.padding.top;
+    return SmoothShadowCard(
+        height: height,
+        margin: EdgeInsets.only(
+            left: animateValue(16),
+            right: animateValue(16),
+            top: animateValue(67 + statusBarHeight)
+        ),
+        borderRadius: BorderRadius.circular(animateValue(8)),
+        child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -25,7 +35,8 @@ class AvailableBudgetCard extends StatelessWidget {
           ],
         ),
       )
-  );
+    );
+  }
 
   Widget _buildHeaderWidget() => Expanded(
     child: Column(
@@ -70,7 +81,7 @@ class AvailableBudgetCard extends StatelessWidget {
 
   Widget _buildProgressBar() => AnimatedProgressBar(
     currentValue: 65,
-    size: 24,
+    size: animateValue(24, minimum: 8),
     decoration: BoxDecoration(
       gradient: ThemeColors.progressBarGradient,
       borderRadius: BorderRadius.circular(18),
@@ -81,5 +92,12 @@ class AvailableBudgetCard extends StatelessWidget {
     ),
     animatedDuration: const Duration(milliseconds: 500),
   );
+
+  double animateValue(double value, {double minimum}) {
+    minimum = minimum ?? double.negativeInfinity;
+    var currentFrameValue = value * animationPercentage;
+    return currentFrameValue >= minimum ?
+        currentFrameValue : minimum;
+  }
 }
 
