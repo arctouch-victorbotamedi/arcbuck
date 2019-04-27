@@ -14,9 +14,13 @@ class SmoothShadowCard extends StatelessWidget {
     var cardColor = Theme.of(context).cardColor;
     return Container(
       margin: margin ?? EdgeInsets.all(4),
-      child: child,
       width: double.infinity,
       height: height,
+      child: ClipRRect(
+        clipBehavior: Clip.antiAlias,
+        borderRadius: BorderRadius.circular(8),
+        child: child,
+      ),
       decoration: BoxDecoration(
           color: cardColor,
           borderRadius: BorderRadius.circular(8),
