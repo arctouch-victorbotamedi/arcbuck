@@ -19,15 +19,11 @@ class _HomeViewState extends State<HomeView> {
   final _scrollThresholdPercentage = 70;
   int _count = 0;
   BottomNavMenu _selectedItem = BottomNavMenu.home;
+  final _pageController = PageController(keepPage: true);
 
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        centerTitle: true,
-        title: Text('April Budget'),
-      ),
       body: _buildBody(context, theme),
       bottomNavigationBar: _buildBottomNavigation(context),
       floatingActionButton: _buildFloatActionButton(context),
@@ -173,7 +169,10 @@ class _HomeViewState extends State<HomeView> {
 
     var color = _selectedItem == BottomNavMenu.settings ? accentColor : Colors.grey;
 
-    return IconButton(icon: Icon(Icons.settings), color: color, onPressed: _onSettingsPressed);
+    return IconButton(
+        icon: Icon(Icons.settings),
+        color: color,
+        onPressed: _onSettingsPressed);
   }
 
   Widget _buildHomeIcon(BuildContext context)
@@ -188,11 +187,17 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Widget _buildBody(BuildContext context, ThemeData theme) {
-
+    return PageView(
+      controller: _pageController,
+      children: [
+        AnimateOnScrollFlutter(),
+        Center(child: Text("Settings"))
+      ],
+    );
     switch (_selectedItem)
     {
       case BottomNavMenu.home:
-        return _buildCenterWidget(context, theme);
+        return AnimateOnScrollFlutter(); //_buildCenterWidget(context, theme);
       case BottomNavMenu.settings:
         return Text("Settings");
     }
@@ -206,14 +211,136 @@ class _HomeViewState extends State<HomeView> {
   }
 
   void _onHomePressed() {
-    setState(() {
-      _selectedItem = BottomNavMenu.home;
-    });
+    //setState(() {
+      //_selectedItem = BottomNavMenu.home;
+      _pageController.animateToPage(0,
+          duration: const Duration(milliseconds: 350),
+          curve: Curves.easeOutQuad
+      );
+   // });
   }
 
   void _onSettingsPressed() {
-    setState(() {
-      _selectedItem = BottomNavMenu.settings;
-    });
+    //setState(() {
+      //_selectedItem = BottomNavMenu.settings;
+      _pageController.animateToPage(1,
+        duration: const Duration(milliseconds: 350),
+        curve: Curves.easeOutQuad
+      );
+    //});
+  }
+}
+
+class AnimateOnScrollFlutter extends StatefulWidget {
+  @override
+  _AnimateOnScrollFlutterState createState() => _AnimateOnScrollFlutterState();
+}
+
+class _AnimateOnScrollFlutterState extends State<AnimateOnScrollFlutter> {
+  final controller = ScrollController();
+  double appBarHeight = 226;
+  static const double minimumAppBarHeight = 118;
+
+  @override
+  Widget build(BuildContext context) =>
+      _buildEventsContainerWidget(context, Theme.of(context));
+
+
+  Widget _buildEventsContainerWidget(BuildContext context, ThemeData theme) {
+    var bloc = BlocProvider.of<EventBloc>(context);
+    return BlocBuilder(
+        bloc: bloc,
+        builder: (context, state) {
+          switch (state.runtimeType) {
+          //case UninitializedState:
+          //  return _buildUninitilazedList();
+            case EventsLoadedState:
+              return _buildEventListWidget(bloc, state);
+            default:
+              return Center(child: Text('Failed to fetch'));
+          }
+        }
+
+    );
+  }
+
+  Widget _buildEventListWidget(EventBloc bloc, EventsLoadedState state) {
+//      ListView.builder(
+//            itemCount: state.events.length,
+//            itemBuilder: (context, index) {
+//              //var currentPercentage =  (index * 100) / state.movies.length;
+//              //if (currentPercentage >= _scrollThresholdPercentage) {
+//              //  bloc.dispatch(Fetch());
+//              //}
+//              return EventListItem(state.events[index]);
+//            },
+//      );
+    var query = MediaQuery.of(context);
+    var statusBarHeight = query.padding.top;
+    return CustomScrollView(
+      controller: controller,
+      slivers: <Widget>[
+        SliverAppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          pinned: true,
+          expandedHeight: appBarHeight,
+          floating: false,
+          bottom: PreferredSize(                       // Add this code
+            preferredSize: Size.fromHeight(minimumAppBarHeight - kToolbarHeight),
+            child: SizedBox(),// Add this code
+          ),
+          flexibleSpace: LayoutBuilder(
+
+            builder: (BuildContext context, BoxConstraints constraints) {
+              double percent = ((constraints.maxHeight - kToolbarHeight) *
+                  100 /
+                  (appBarHeight - kToolbarHeight));
+              print('Percent $percent');
+              return Stack(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: minimumAppBarHeight + statusBarHeight,
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(colors: [const Color(0xffff8300), const Color(0xFFe8670a)])
+                    ),
+                    child: Center(
+                      child: RichText(
+                        strutStyle: StrutStyle(
+                            fontSize: 24
+                        ),
+                        text: TextSpan(
+                            text: 'April’s ',
+                            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                            children: [
+                              TextSpan(
+                                  text: 'Budget',
+                                  style: new TextStyle(fontSize: 24, fontWeight: FontWeight.normal))
+                            ]
+                        ),
+                      ),
+                    ),
+                  ),
+                  AvailableBudgetCard(
+                    height: 167,
+                    padding: EdgeInsets.only(left: 16, right: 16, top: 67 + statusBarHeight),
+                  )
+                ],
+              );
+            },
+          ),
+        ),
+        SliverList(
+            delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+              print('item $index');
+              if (index >= state.events.length)
+                return null;
+              return EventListItem(state.events[index]);
+            }
+            )
+        )
+      ],
+    );
   }
 }
