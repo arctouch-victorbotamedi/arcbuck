@@ -5,13 +5,15 @@ import 'package:flutter/material.dart';
 class AvailableBudgetCard extends StatelessWidget {
   final double height;
   final EdgeInsets padding;
+  final BorderRadiusGeometry borderRadius;
 
-  AvailableBudgetCard({this.height, this.padding});
+  AvailableBudgetCard({this.height, this.padding, this.borderRadius});
 
   @override
   Widget build(BuildContext context) => SmoothShadowCard(
       height: height,
       margin: padding,
+      borderRadius: borderRadius,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(

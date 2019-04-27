@@ -238,7 +238,7 @@ class AnimateOnScrollFlutter extends StatefulWidget {
 
 class _AnimateOnScrollFlutterState extends State<AnimateOnScrollFlutter> {
   final controller = ScrollController();
-  double appBarHeight = 226;
+  static const double appBarHeight = 226;
   static const double minimumAppBarHeight = 118;
 
   @override
@@ -265,16 +265,6 @@ class _AnimateOnScrollFlutterState extends State<AnimateOnScrollFlutter> {
   }
 
   Widget _buildEventListWidget(EventBloc bloc, EventsLoadedState state) {
-//      ListView.builder(
-//            itemCount: state.events.length,
-//            itemBuilder: (context, index) {
-//              //var currentPercentage =  (index * 100) / state.movies.length;
-//              //if (currentPercentage >= _scrollThresholdPercentage) {
-//              //  bloc.dispatch(Fetch());
-//              //}
-//              return EventListItem(state.events[index]);
-//            },
-//      );
     var query = MediaQuery.of(context);
     var statusBarHeight = query.padding.top;
     return CustomScrollView(
@@ -291,12 +281,12 @@ class _AnimateOnScrollFlutterState extends State<AnimateOnScrollFlutter> {
             child: SizedBox(),// Add this code
           ),
           flexibleSpace: LayoutBuilder(
-
             builder: (BuildContext context, BoxConstraints constraints) {
-              double percent = ((constraints.maxHeight - kToolbarHeight) *
-                  100 /
-                  (appBarHeight - kToolbarHeight));
-              print('Percent $percent');
+              var maximumDistance =  appBarHeight - minimumAppBarHeight;
+              var currentDistance = (constraints.maxHeight - statusBarHeight)
+                  - minimumAppBarHeight;
+              var animationPercentage = currentDistance / maximumDistance;
+
               return Stack(
                 children: [
                   Container(
@@ -324,7 +314,11 @@ class _AnimateOnScrollFlutterState extends State<AnimateOnScrollFlutter> {
                   ),
                   AvailableBudgetCard(
                     height: 167,
-                    padding: EdgeInsets.only(left: 16, right: 16, top: 67 + statusBarHeight),
+                    borderRadius: BorderRadius.circular(8 * animationPercentage),
+                    padding: EdgeInsets.only(
+                        left: 16 * animationPercentage,
+                        right: 16 * animationPercentage,
+                        top: (67 + statusBarHeight) * animationPercentage),
                   )
                 ],
               );
