@@ -4,10 +4,10 @@ class EventRepository {
 
   Future<List<Event>> fetch(int page) async {
     var mockEvents = [
-      Event("Churras na lage"),
-      Event("Futebol de quarta"),
-      Event("Basquete de terça"),
-      Event("Almocinho Nipo"),
+      Event(name: "Churras na lage", location: "Lage do Vitinho", date: DateTime.now(), category: EventCategory.food),
+      Event(name: "Churras na lage", location: "Lage do Vitinho", date: DateTime.now(), category: EventCategory.food),
+      Event(name: "Churras na lage", location: "Lage do Vitinho", date: DateTime.now(), category: EventCategory.sport),
+      Event(name: "Churras na lage", location: "Lage do Vitinho", date: DateTime.now(), category: EventCategory.sport),
     ];
     return mockEvents;
   }
