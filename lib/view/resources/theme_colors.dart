@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 
 abstract class ThemeColors {
 
@@ -34,4 +34,11 @@ abstract class ThemeColors {
     end: AlignmentDirectional.bottomCenter
   );
 
+  static const primaryGradient = LinearGradient(
+      colors: [const Color(0xFFFF8300), const Color(0xFFE8670A)]
+  );
+
+  static const progressBarGradient = LinearGradient(
+      colors: [const Color(0xFFFd8A11), const Color(0xFFE8670A)]
+  );
 }

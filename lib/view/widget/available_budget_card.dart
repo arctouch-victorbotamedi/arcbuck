@@ -1,3 +1,4 @@
+import 'package:arcbuck/view/resources/theme_colors.dart';
 import 'package:arcbuck/view/widget/animated_progress_bar.dart';
 import 'package:arcbuck/view/widget/smooth_shadow_card.dart';
 import 'package:flutter/material.dart';
@@ -71,7 +72,7 @@ class AvailableBudgetCard extends StatelessWidget {
     currentValue: 65,
     size: 24,
     decoration: BoxDecoration(
-      gradient: LinearGradient(colors: [const Color(0xfffd8a11), const Color(0xFFe8670a)]),
+      gradient: ThemeColors.progressBarGradient,
       borderRadius: BorderRadius.circular(18),
     ),
     backgroundDecoration: BoxDecoration(
