@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 
 abstract class ThemeColors {
 
-  static const accent = Color(0xFFFF8400);
+  static const accent = Color(0xFFFF8300);
 
   static const white = Color(0xFFFFFFFF);
 
@@ -35,7 +35,7 @@ abstract class ThemeColors {
   );
 
   static const primaryGradient = LinearGradient(
-      colors: [const Color(0xFFFF8300), const Color(0xFFE8670A)]
+      colors: [accent, const Color(0xFFE8670A)]
   );
 
   static const progressBarGradient = LinearGradient(
