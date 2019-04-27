@@ -1,10 +1,10 @@
 import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 
 abstract class ThemeColors {
 
-  static const accent = Color(0xFFFF8400);
+  static const accent = Color(0xFFFF8300);
 
   static const white = Color(0xFFFFFFFF);
 
@@ -34,4 +34,11 @@ abstract class ThemeColors {
     end: AlignmentDirectional.bottomCenter
   );
 
+  static const primaryGradient = LinearGradient(
+      colors: [accent, const Color(0xFFE8670A)]
+  );
+
+  static const progressBarGradient = LinearGradient(
+      colors: [const Color(0xFFFd8A11), const Color(0xFFE8670A)]
+  );
 }

@@ -6,8 +6,9 @@ class SmoothShadowCard extends StatelessWidget {
   final Widget child;
   final EdgeInsets margin;
   final double height;
+  final BorderRadiusGeometry borderRadius;
 
-  SmoothShadowCard({this.child, this.margin, this.height});
+  SmoothShadowCard({this.child, this.margin, this.height, this.borderRadius});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class SmoothShadowCard extends StatelessWidget {
       ),
       decoration: BoxDecoration(
           color: cardColor,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: borderRadius ?? BorderRadius.circular(8),
           boxShadow: [
             BoxShadow(
               spreadRadius: 0,

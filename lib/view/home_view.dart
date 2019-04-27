@@ -1,10 +1,6 @@
-import 'package:arcbuck/module/event_bloc.dart';
-import 'package:arcbuck/module/event_states.dart';
 import 'package:arcbuck/view/resources/styles.dart';
-import 'package:arcbuck/view/widget/available_budget_card.dart';
-import 'package:arcbuck/view/widget/event_list_item.dart';
+import 'package:arcbuck/view/widget/home_sliver.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 enum BottomNavMenu { home, settings }
 
@@ -16,101 +12,18 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  final _scrollThresholdPercentage = 70;
-  int _count = 0;
   BottomNavMenu _selectedItem = BottomNavMenu.home;
+  final _pageController = PageController(keepPage: true);
 
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        centerTitle: true,
-        title: Text('April Budget'),
-      ),
       body: _buildBody(context, theme),
       bottomNavigationBar: _buildBottomNavigation(context),
       floatingActionButton: _buildFloatActionButton(context),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
-
-  Widget _buildCenterWidget(BuildContext context, ThemeData theme) {
-    return Column(
-      children: [
-        _buildHeaderWidget(context, theme),
-        _buildEventsContainerWidget(context, theme)
-      ],
-    );
-  }
-
-  Widget _buildHeaderWidget(BuildContext context, ThemeData theme) {
-    var query = MediaQuery.of(context);
-    var statusBarHeight = query.padding.top;
-    return Stack(
-      children: [
-        Container(
-          width: double.infinity,
-          height: 118 + statusBarHeight,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [const Color(0xffff8300), const Color(0xFFe8670a)])
-          ),
-          child: Center(
-            child: RichText(
-              strutStyle: StrutStyle(
-                fontSize: 24
-              ),
-              text: TextSpan(
-                text: 'April’s ',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                children: [
-                  TextSpan(
-                      text: 'Budget',
-                      style: new TextStyle(fontSize: 24, fontWeight: FontWeight.normal))
-                ]
-              ),
-            ),
-          ),
-        ),
-        AvailableBudgetCard(
-          height: 167,
-          padding: EdgeInsets.only(left: 16, right: 16, top: 67 + statusBarHeight),
-        )
-      ],
-    );
-  }
-
-    Widget _buildEventsContainerWidget(BuildContext context, ThemeData theme) {
-      var bloc = BlocProvider.of<EventBloc>(context);
-      return BlocBuilder(
-          bloc: bloc,
-          builder: (context, state) {
-            switch (state.runtimeType) {
-            //case UninitializedState:
-            //  return _buildUninitilazedList();
-              case EventsLoadedState:
-                return _buildEventListWidget(bloc, state);
-              default:
-                return Center(child: Text('Failed to fetch'));
-            }
-          }
-        
-    );
-  }
-
-  Widget _buildEventListWidget(EventBloc bloc, EventsLoadedState state) =>
-      Flexible(
-          child: ListView.builder(
-            itemCount: state.events.length,
-            itemBuilder: (context, index) {
-              //var currentPercentage =  (index * 100) / state.movies.length;
-              //if (currentPercentage >= _scrollThresholdPercentage) {
-              //  bloc.dispatch(Fetch());
-              //}
-              return EventListItem(state.events[index]);
-            },
-          )
-      );
 
   Widget _buildFloatActionButton(BuildContext context) {
     return Container(
@@ -173,7 +86,10 @@ class _HomeViewState extends State<HomeView> {
 
     var color = _selectedItem == BottomNavMenu.settings ? accentColor : Colors.grey;
 
-    return IconButton(icon: Icon(Icons.settings), color: color, onPressed: _onSettingsPressed);
+    return IconButton(
+        icon: Icon(Icons.settings),
+        color: color,
+        onPressed: _onSettingsPressed);
   }
 
   Widget _buildHomeIcon(BuildContext context)
@@ -188,14 +104,13 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Widget _buildBody(BuildContext context, ThemeData theme) {
-
-    switch (_selectedItem)
-    {
-      case BottomNavMenu.home:
-        return _buildCenterWidget(context, theme);
-      case BottomNavMenu.settings:
-        return Text("Settings");
-    }
+    return PageView(
+      controller: _pageController,
+      children: [
+        HomeSliver(),
+        Center(child: Text("Settings"))
+      ],
+    );
   }
 
   List<Widget> _buildBottomNavigationItems(BuildContext context) {
@@ -206,14 +121,23 @@ class _HomeViewState extends State<HomeView> {
   }
 
   void _onHomePressed() {
-    setState(() {
-      _selectedItem = BottomNavMenu.home;
-    });
+    //setState(() {
+      //_selectedItem = BottomNavMenu.home;
+      _pageController.animateToPage(0,
+          duration: const Duration(milliseconds: 350),
+          curve: Curves.easeOutQuad
+      );
+   // });
   }
 
   void _onSettingsPressed() {
-    setState(() {
-      _selectedItem = BottomNavMenu.settings;
-    });
+    //setState(() {
+      //_selectedItem = BottomNavMenu.settings;
+      _pageController.animateToPage(1,
+        duration: const Duration(milliseconds: 350),
+        curve: Curves.easeOutQuad
+      );
+    //});
   }
 }
+
