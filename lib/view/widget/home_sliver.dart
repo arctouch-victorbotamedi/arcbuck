@@ -1,3 +1,4 @@
+import 'package:arcbuck/data/event.dart';
 import 'package:arcbuck/module/event_bloc.dart';
 import 'package:arcbuck/module/event_states.dart';
 import 'package:arcbuck/view/resources/theme_colors.dart';
@@ -5,6 +6,7 @@ import 'package:arcbuck/view/widget/animated_available_budget_card.dart';
 import 'package:arcbuck/view/widget/event_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 class HomeSliver extends StatefulWidget {
   @override
@@ -30,7 +32,7 @@ class _HomeSliverState extends State<HomeSliver> {
           //case UninitializedState:
           //  return _buildUninitilazedList();
             case EventsLoadedState:
-              return _buildEventListWidget(bloc, state);
+              return _buildEventListWidget(_eventsToRenderItems(state.events));
             default:
               return Center(child: Text('Failed to fetch'));
           }
@@ -38,7 +40,7 @@ class _HomeSliverState extends State<HomeSliver> {
     );
   }
 
-  Widget _buildEventListWidget(EventBloc bloc, EventsLoadedState state) {
+  Widget _buildEventListWidget(List<_EventRenderItem> events) {
     var query = MediaQuery.of(context);
     var statusBarHeight = query.padding.top;
     return CustomScrollView(
@@ -98,13 +100,59 @@ class _HomeSliverState extends State<HomeSliver> {
         SliverList(
             delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
               print('item $index');
-              if (index >= state.events.length)
+              if (index >= events.length)
                 return null;
-              return EventListItem(state.events[index]);
+
+              return EventListItem(
+                  events[index].event, header: events[index].header);
+
             }
             )
         )
       ],
     );
   }
+
+  List<_EventRenderItem> _eventsToRenderItems(List<Event> events) {
+    if (events.isEmpty)
+      return [];
+
+    var renderItems = [_EventRenderItem(events.first, header: "This week")];
+    var initialWeek = _weekNumber(events.first.date);
+    var currentWeek = initialWeek;
+    var allHeadersIncluded = false;
+    var firstWeekIncluded = false;
+    for (int i = 1; i < events.length; i++) {
+      String header;
+      var weekDifference = _weekNumber(events[i].date) - currentWeek;
+      if (!allHeadersIncluded && weekDifference > 0 && weekDifference <= 2) {
+        if (weekDifference == 1 && !firstWeekIncluded) {
+          header = "Next week";
+          firstWeekIncluded = true;
+        }
+        else {
+          if (weekDifference == 2 && !allHeadersIncluded) {
+            header = "Upcoming";
+            allHeadersIncluded = true;
+          }
+        }
+      }
+      renderItems.add(_EventRenderItem(events[i], header: header));
+      currentWeek = _weekNumber(events.first.date);
+    }
+
+    return renderItems;
+  }
+
+  int _weekNumber(DateTime date) {
+    int dayOfYear = int.parse(DateFormat("D").format(date));
+    return ((dayOfYear - date.weekday + 10) / 7).floor();
+  }
+}
+
+class _EventRenderItem {
+  final Event event;
+  final String header;
+
+  _EventRenderItem(this.event, {this.header=null});
 }

@@ -16,6 +16,8 @@ abstract class ThemeColors {
 
   static const shadowColor = Color(0x16000000);
 
+  static const kindaBlack = Color(0xA6000000);
+
   static const torchRedGradient = LinearGradient(
     colors: [Color(0xFFFF0844), Color(0xFFFFB199)],
     begin: AlignmentDirectional.topCenter,
